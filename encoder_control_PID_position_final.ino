@@ -450,7 +450,7 @@ void stop()
 
 void initMsg()
 {
-  if(Serial.available())
+  /*if(Serial.available())
   {
     String msgData =Serial.readStringUntil('\n');
     StaticJsonDocument<500> doc;
@@ -459,8 +459,8 @@ void initMsg()
     {
       String msgString = doc["order"];
       msg = msgString.charAt(0);
-    }
-    
+    }*/
+    msg = Serial.print();
       //Serial.print(msg);
     //security_counter = millis();
   }
