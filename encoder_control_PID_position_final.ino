@@ -86,8 +86,9 @@ void loop() {
 
 void setMotor(int dir, int pwmVal, int pwm, int in1, int in2)
 {
-  analogWrite(pwm,pwmVal);
   analogWrite(pwm + 1,pwmVal);//PWM du moteur gauche pin 6
+  
+  analogWrite(pwm,pwmVal);
   
   if(dir == 1){
     if(turnSide == 'R')
@@ -95,7 +96,7 @@ void setMotor(int dir, int pwmVal, int pwm, int in1, int in2)
       digitalWrite(in1,HIGH);
       digitalWrite(in2,HIGH);
     }
-    else if(directionSense == 'B')
+    else if(directionSense == 'B') 
     {
       digitalWrite(in1,LOW);
       digitalWrite(in2,HIGH);
@@ -471,7 +472,7 @@ void initMsg()
  
 }
 
-void updateSpeed(bool trend)
+void updateSpeed(bool trend)// vitesse en mm/ms
 {
   if(trend == true)
   {
@@ -497,7 +498,7 @@ void updateSpeed(bool trend)
   }
 }
 
-void updateDistance(bool trend)
+void updateDistance(bool trend)// distance en mm
 {
   if(trend == true)
   {
@@ -512,12 +513,12 @@ void updateDistance(bool trend)
     if(countStepDistance >= 5)
     {
       countStepDistance = 0;
-      distance = distance + 0.1;
+      distance = distance + 1;// distance en mm
     }
     if(countStepDistance <= -5)
     {
       countStepDistance = 0;
-      distance = distance - 0.1;
+      distance = distance - 1;// distance en mm
     }
   }
 }
@@ -900,22 +901,22 @@ void trajectoryCorrection()
     {
         if( pos > pos_i + 4)
         {
-          analogWrite(PWM,(speedMotor/abs(pos - pos_i))); 
+          analogWrite(PWM,(speedMotor/(abs(pos - pos_i)))); 
         }
         if( pos_i > pos + 4)
         {
-          analogWrite(PWM + 1,(speedMotor/abs(pos - pos_i)));
+          analogWrite(PWM + 1,(speedMotor/(abs(pos - pos_i))));
         }
     }
     if(directionSense == 'B')
     {
         if( pos < pos_i - 4)
         {
-          analogWrite(PWM,(speedMotor/abs(pos - pos_i)));
+          analogWrite(PWM,(speedMotor/(abs(pos - pos_i))));
         }
         if( pos_i < pos - 4)
         {
-          analogWrite(PWM + 1,(speedMotor/abs(pos - pos_i)));
+          analogWrite(PWM + 1,(speedMotor/(abs(pos - pos_i))));
         }
     }
     delay(15);
