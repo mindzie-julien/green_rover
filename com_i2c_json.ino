@@ -24,7 +24,7 @@ void serializeObject()
 void receiveEvent(int nBytes) {
     while (Wire.available()) {
         request = (char) Wire.read();
-        received_data += c;
+        received_data += request;
     }
 
   // Parse les données JSON reçues
