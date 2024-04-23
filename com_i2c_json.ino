@@ -24,7 +24,13 @@ void serializeObject()
 void receiveEvent(int nBytes) {
     while (Wire.available()) {
         request = (char) Wire.read();
+        received_data += c;
     }
+
+  // Parse les données JSON reçues
+  DynamicJsonDocument doc(1024);
+  DeserializationError error = deserializeJson(doc, received_data);
+
 }
 
 void requestEvent() {
