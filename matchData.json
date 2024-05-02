@@ -1,0 +1,16 @@
+{
+"duration":0,
+"upper_limit_coord_x":0,
+"lower_limit_coord_x":0,
+"upper_limit_coord_y":0,
+"lower_limit_coord_y":0,
+"start_time":0,
+"time_limit":0,
+"position_range":100,
+"length":3000,
+"width":2000,
+"own_size":0,
+"opponent_size":0,
+"angle_tolerance":1,
+"distance_tolerance":3
+}

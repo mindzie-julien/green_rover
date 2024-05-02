@@ -1,0 +1,2 @@
+{"coord_x": 250.0, "coord_y": 225.0, "angle": 0.0}
+{"coord_x":2775,"coord_y":225, "angle":180.0}
