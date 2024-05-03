@@ -1,0 +1,21 @@
+{
+    "U_L": {"U_L_": 45.62},
+    "U_M": {"M_M": 700.0},
+    "U_R": {"U_R_": 45.62},
+    "U_R_": {"M_M": 83.21},
+    "U_L_": {"M_M": 83.21},
+    "M_L": {"M_M": 90},
+    "M_M": {"U_L_": 83.21, "U_R_": 83.21, "D_L_": 83.63, "D_R_": 83.63, "M_L": 90, "M_R": 90},
+    "M_R": {"M_M": 90},
+    "D_L": {"D_L_": 45.62},
+    "D_M": {"M_M": 225.0},
+    "D_R": {"D_R_": 45.62},
+    "D_R_": {"M_M": 83.63},
+    "D_L_": {"M_M": 83.63},
+    "SMALL_BLUE_SIDE_BLUE" : {"SMALL_YELLOW_SIDE_BLUE": 775},
+    "SMALL_BLUE_SIDE_YELLOW" :{"SMALL_YELLOW_SIDE_YELLOW": 775},
+    "LARGE_BLUE_AREA" :{"SMALL_YELLOW_SIDE_BLUE": 775},
+    "SMALL_YELLOW_SIDE_BLUE" :{"SMALL_BLUE_SIDE_BLUE": 775},
+    "SMALL_YELLOW_SIDE_YELLOW" :{"SMALL_BLUE_SIDE_YELLOW": 775},
+    "LARGE_YELLOW_AREA" :{"SMALL_BLUE_SIDE_YELLOW": 775}
+}
