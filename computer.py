@@ -190,6 +190,7 @@ def traceRoute(server, endPointKey):
     startPoint = selectCkeckPoint(server, coord_x, coord_y)
     #startPoint = checkpointList[key_coord]
     path = dijkstra(checkpointList, startPoint, endPointKey)
+    print(path)
     return path
     
 def traceEscapeRoute(server, endPointKey, escapeType):

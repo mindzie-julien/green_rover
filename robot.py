@@ -174,7 +174,7 @@ if __name__ == '__main__':
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(robotThread.gpio_num, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(robotThread.gpio_num_obstacle_forward, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)        
-    GPIO.add_event_detect(robotThread.gpio_num_obstacle_forward, GPIO.RISING, callback=my_callback_forward, bouncetime=500) 
+    #GPIO.add_event_detect(robotThread.gpio_num_obstacle_forward, GPIO.RISING, callback=my_callback_forward, bouncetime=500) 
     GPIO.setup(robotThread.gpio_num_obstacle_backward, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     
     

@@ -20,6 +20,32 @@ ASK_FOR_DATA = 0x1
 I2C_LENGTH_LIMIT = 64
 SLEEP_TIME = 0
 
+def selectAvoidanceTarget(target):
+    if (target == "U_R"):
+        return "M_R"
+    elif (target == "M_R"):
+        return "D_R"
+    elif (target == "D_R"):
+        return "D_R_"
+    elif (target == "D_R_"):
+        return "D_M"
+    elif (target == "D_M"):
+        return "D_L_"
+    elif (target == "D_L_"):
+        return "D_L"
+    elif (target == "D_L"):
+        return "M_L"
+    elif (target == "U_L"):
+        return "U_L_"
+    elif (target == "U_L_"):
+        return "U_M"
+    elif (target == "U_M"):
+        return "U_R_"
+    elif (target == "U_R_"):
+        return "U_R"
+    else :
+        return "M_M"
+
 def avoidanceDriving(server):
     
     server.busy = True
@@ -52,7 +78,7 @@ def avoidanceDriving(server):
            print("ok")
            
     else:
-       endPointKey = "M_M"
+       endPointKey = selectAvoidanceTarget(target)#"M_M"
        escapeType = "B"
        #print("echoB")
        path = pc.traceEscapeRoute(server, endPointKey, escapeType)
