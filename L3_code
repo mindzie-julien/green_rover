@@ -5,8 +5,8 @@ from time import sleep
 
 KP1 = 0.5 #0.50 #0.1
 KP2 = 0.5 #0.50 #0.1
-KD1 = 0.50 #0.1
-KD2 = 0.50 #0.1
+KD1 = 0.60 #0.1
+KD2 = 0.60 #0.1
 KI1 = 0.0
 KI2 = 0.0
 TARGET = 1000
@@ -123,6 +123,34 @@ def control_motors_Av(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2_
     return m1_speed, m2_speed
 
 
+def control_motors_Ar(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2_prev_error, e1_sum_error, e2_sum_error):
+    global e1_adj, e2_adj
+    e1_adj = (e1_error * KP1) + (e1_prev_error * KD1) + (e1_sum_error * KI1)
+    e2_adj = (e2_error * KP2) + (e2_prev_error * KD2) + (e2_sum_error * KI2)
+
+    m1_speed += e1_adj
+    m2_speed += e2_adj
+
+    # Assurez-vous que les vitesses des moteurs restent dans les limites (0, 100)
+    m1_speed = min(max(m1_speed, 0), 100)
+    m2_speed = min(max(m2_speed, 0), 100)
+
+# Commande des moteurs ici en ajustant le PWM et les directions
+    if m1_speed >= 0:
+        motor1_pwm.start(m1_speed)
+        avancer(1)
+    else:
+        arret(1)
+
+    if m2_speed >= 0:
+        motor2_pwm.start(m2_speed)
+        reculer(2)
+
+    else:
+        arret(2)
+
+    return m1_speed, m2_speed
+
 def control_motors_Dr(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2_prev_error, e1_sum_error, e2_sum_error):
     global e1_adj, e2_adj
     
@@ -165,7 +193,7 @@ def control_motors_Gch(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2
     # Assurez-vous que les vitesses des moteurs restent dans les limites (0, 100)
     m1_speed = min(max(m1_speed, 0), 100)
     m2_speed = min(max(m2_speed, 0), 100) # Commande des moteurs ici en ajustant le PWM et les directions
-    
+
     if m1_speed >= 0:
         motor1_pwm.start(m1_speed)
         avancer(1)
@@ -206,14 +234,19 @@ try:
         e1_error = e1_value - e2_value
         e2_error = e2_value - e1_value
 
- # Réinitialiser les compteurs d'impulsions pour le prochain échantillon
-        encoder1_counter = 0
-        encoder2_counter = 0
+        while(count1 < 1750):
+        # Lire les compteurs d'impulsions des encodeurs
+         e1_value = encoder1_counter
+         e2_value = encoder2_counter
 
-        e1_error = e1_value - e2_value
-        e2_error = e2_value - e1_value  
+        # Réinitialiser les compteurs d'impulsions pour le prochain échantillon
+         encoder1_counter = 0
+         encoder2_counter = 0
+
+         e1_error = e1_value - e2_value
+         e2_error = e2_value - e1_value  
     # Vérifiez si la différence d'erreur est supérieure à 2
-        if abs(e1_error - e2_error) > 2:
+         if abs(e1_error - e2_error) > 2:
     # Vérifiez si la différence d'erreur est supérieure à 2
            if e2_error > e1_error:
              print("L'erreur est supérieur à 2")
@@ -227,24 +260,24 @@ try:
         # Assurez-vous que la vitesse reste dans les limites acceptables
              m2_speed = max(m2_speed, 0)  # Assurez-vous que la vitesse ne devienne pas négative
 
-        m1_speed, m2_speed = control_motors_Av(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2_prev_error, e1_sum_error, e2_sum_error)
-        
-        print(" Tic_1 {} Tic_2 {}".format(count1, count2))
+         m1_speed, m2_speed = control_motors_Av(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2_prev_error, e1_sum_error, e2_sum_error)
+
+         print(" Tic_1 {} Tic_2 {}".format(count1, count2))
        # print("{} error1 {} error2 {}".format(n, e1_error, e2_error))
        # print("e1.adj {} e2.adj {} m1 {} m2 {}".format(e1_adj, e2_adj, m1_speed, m2_speed))
-        n+=1
-        e1_prev_error = e1_error
-        e2_prev_error = e2_error
+         n+=1
+         e1_prev_error = e1_error
+         e2_prev_error = e2_error
 
-        e1_sum_error += e1_error
-        e2_sum_error += e2_error
+         e1_sum_error += e1_error
+         e2_sum_error += e2_error
         
         arret(1)
         arret(2)
         sleep(0.2)
-
-    while (count1<1822):
-        m1_speed, m2_speed = control_motors_Dr(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2_prev_error, e1_sum_error, e2_sum_error)
+        
+        while (count1<1822):
+          m1_speed, m2_speed = control_motors_Dr(m1_speed, m2_speed, e1_error, e2_error, e1_prev_error, e2_prev_error, e1_sum_error, e2_sum_error)
 
         arret(1)
         arret(2)
@@ -262,4 +295,5 @@ except KeyboardInterrupt:
     motor1_pwm.stop()
     motor2_pwm.stop()
     GPIO.cleanup()
+        
 
