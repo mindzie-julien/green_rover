@@ -1,3 +1,6 @@
 {
-"SMALL_YELLOW_SIDE_BLUE":"pose"
+"PLANT_AREA_FORWARD_SIDE_BLUE":"open",
+"LARGE_BLUE_AREA":"close",
+"None":"back",
+"SMALL_BLUE_SIDE_BLUE":"close"
 }

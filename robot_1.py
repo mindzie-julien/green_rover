@@ -192,7 +192,7 @@ class RobotThread(threading.Thread):
                 
             areaCoord = self.coordinate_area.get(area)
             speed = 152#pc.selectSpeed(areaCoord)
-            endPointKey = pc.selectLastTagRoute(area)
+            endPointKey = area#pc.selectLastTagRoute(area)
             path = pc.traceRoute(robotStorageData, endPointKey)
             
             for cle,valeur in robotStorageData.tagRoute.items():

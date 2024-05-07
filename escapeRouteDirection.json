@@ -1,0 +1,21 @@
+{
+    "U_L": 11,
+    "U_M": 9,
+    "U_R": 7,
+    "U_R_": 8,
+    "U_L_": 10,
+    "M_L": 10,
+    "M_M": 0,
+    "M_R": 6,
+    "D_L": 1,
+    "D_M": 3,
+    "D_R": 5,
+    "D_R_": 4,
+    "D_L_": 2,
+    "SMALL_BLUE_SIDE_BLUE" : -6,
+    "SMALL_BLUE_SIDE_YELLOW" : -4,
+    "LARGE_BLUE_AREA" : -2,
+    "SMALL_YELLOW_SIDE_BLUE" : -1,
+    "SMALL_YELLOW_SIDE_YELLOW" : -5,
+    "LARGE_YELLOW_AREA" : -3
+}

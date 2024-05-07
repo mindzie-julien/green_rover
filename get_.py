@@ -64,7 +64,10 @@ with SMBus(1) as bus:
 
     lenght = ask_data_lenght()
     response = receive_json()
-    pc.writeData("feedback.json", response)
+    data = {}
+    data["distance"] = response.get("D")
+    data["angle"] = response.get("A")
+    pc.writeData("feedback.json", data)
     
  
 

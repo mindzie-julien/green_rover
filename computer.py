@@ -64,10 +64,10 @@ def selectSpeed(targetPoint):
 
 def selectTime(motionType, value):
     if(motionType == "rotation"):
-        result = abs(value)*0.03
+        result = abs(value)*0.02
         return result
     if(motionType == "translation"):
-        result = value*0.006
+        result = value*0.002
         return result
 
 def reachedValue(typeName, value, target_value):
@@ -189,15 +189,44 @@ def traceRoute(server, endPointKey):
     coord_y = positionData["coord_y"]
     startPoint = selectCkeckPoint(server, coord_x, coord_y)
     #startPoint = checkpointList[key_coord]
+    previousTarget = server.previousTarget
+    if (previousTarget == "PLANT_AREA_FORWARD_SIDE_BLUE"):
+        startPoint = "PLANT_AREA_FORWARD_SIDE_BLUE"
+    if (previousTarget == "PLANT_AREA_BACKWARD_SIDE_BLUE"):
+        startPoint = "PLANT_AREA_BACKWARD_SIDE_BLUE"
+    """if (previousTarget == "PLANT_AREA_FORWARD_SIDE_MIDDLE"):
+        startPoint = "PLANT_AREA_FORWARD_SIDE_MIDDLE"
+    if (previousTarget == "PLANT_AREA_BACKWARD_SIDE_MIDDLE"):
+        startPoint = "PLANT_AREA_BACKWARD_SIDE_MIDDLE"
+        """
+    if (previousTarget == "PLANT_AREA_FORWARD_SIDE_YELLOW"):
+        startPoint = "PLANT_AREA_FORWARD_SIDE_YELLOW" 
+    if (previousTarget == "PLANT_AREA_BACKWARD_SIDE_YELLOW"):
+        startPoint = "PLANT_AREA_BACKWARD_SIDE_YELLOW"
     path = dijkstra(checkpointList, startPoint, endPointKey)
+    #print("previousTarget: " + str(server.previousTarget))
     return path
     
 def traceEscapeRoute(server, endPointKey, escapeType):
     positionData = server.positionData
-    
+    valueCurrentTarget = 0
+    valuePreviousTarget = 0
+    valueCurrentTarget = server.escapeRouteDirection.get(server.currentTarget)
+    valuePreviousTarget = server.escapeRouteDirection.get(server.previousTarget)
+    print("escapeType: " + str(escapeType))
+    print("currentTarget: " + str(valueCurrentTarget))
+    print("previousTarget: " + str(valuePreviousTarget))
     if escapeType == 'A':
-        checkpointList = server.escapeRoute_A
-        print("escapeType A")
+        valueCurrentTarget = server.escapeRouteDirection.get(server.currentTarget)
+        valuePreviousTarget = server.escapeRouteDirection.get(server.previousTarget)
+        direction = 0
+        direction = valueCurrentTarget - valuePreviousTarget
+        if (direction >= 0):
+            print("escapeType A_")
+            checkpointList = server.escapeRoute_A_
+        else:
+            print("escapeType A")
+            checkpointList = server.escapeRoute_A
     if escapeType == 'B':
         print("escapeType B")
         checkpointList = server.escapeRoute_B
@@ -207,7 +236,7 @@ def traceEscapeRoute(server, endPointKey, escapeType):
     coord_x = positionData["coord_x"]
     coord_y = positionData["coord_y"]
     
-    startPoint = selectCkeckPoint(server, coord_x, coord_y)
+    startPoint = server.previousTarget#selectCkeckPoint(server, coord_x, coord_y)
     print("test")
     #startPoint = checkpointList[key_coord]
     path = dijkstra(checkpointList, startPoint, endPointKey)
@@ -253,12 +282,13 @@ def dijkstra(graph, start, end):
 
 def updatePosition(server):
     subprocess.call(["python3", "get_.py"])
-    distanceJson = getDataFromFile("feedback.json")
-    distance = distanceJson["distance"]
-    
-    currentAngle = server.positionData.get("angle")
-    server.positionData["coord_x"] = distance* m.cos(m.radians(currentAngle))
-    server.positionData["coord_y"] = distance* m.sin(m.radians(currentAngle))
+    positionFeedbackJson = readData("feedback.json")
+    if(positionFeedbackJson):
+        distance = positionFeedbackJson["distance"]
+        currentAngle = positionFeedbackJson["angle"]
+        #currentAngle = server.positionData.get("angle")
+        server.positionData["coord_x"] = server.positionData["coord_x"] + distance* m.cos(m.radians(currentAngle))
+        server.positionData["coord_y"] = server.positionData["coord_y"] + distance* m.sin(m.radians(currentAngle))
     """dataJson = getDataFromFile("motionData.json")
     current_point = getDataFromFile("positionData.json")
     current_angle = current_point.get("angle")

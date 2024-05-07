@@ -20,7 +20,34 @@ ASK_FOR_DATA = 0x1
 I2C_LENGTH_LIMIT = 64
 SLEEP_TIME = 0
 
-def avoidanceDriving(server):
+def selectAvoidanceTarget(target):
+    
+    if (target == "U_R"):
+        return "M_R"
+    elif (target == "M_R"):
+        return "D_R"
+    elif (target == "D_R"):
+        return "D_R_"
+    elif (target == "D_R_"):
+        return "D_M"
+    elif (target == "D_M"):
+        return "D_L_"
+    elif (target == "D_L_"):
+        return "D_L"
+    elif (target == "D_L"):
+        return "M_L"
+    elif (target == "U_L"):
+        return "U_L_"
+    elif (target == "U_L_"):
+        return "U_M"
+    elif (target == "U_M"):
+        return "U_R_"
+    elif (target == "U_R_"):
+        return "U_R"
+    else :
+        return "M_M"
+
+def stopHomologation(server):
     
     server.busy = True
     data = {}
@@ -30,6 +57,36 @@ def avoidanceDriving(server):
     
     send.send_json(data, I2C_SLAVE_ADDR_MOTION)
     time.sleep(0.1)
+    #pc.updatePosition(server)
+    server.busy = False
+
+def avoidanceDriving(server):
+    
+    server.busy = True
+    data = {}
+    data["order"] = "E"
+    data["value"] = 0
+    print(data["order"] + " : " + str(data["value"]) )
+    send.send_json(data, I2C_SLAVE_ADDR_MOTION)
+    time.sleep(0.1)
+    #pc.updatePosition(server)
+    if (server.goHome):
+        terminus = " "
+        speed = 1
+        terminus = list(server.strategy.keys())[-1]
+        print("terminus: " + str(terminus) )
+        path = pc.traceRoute(server, terminus)
+       
+        for i in range(len(path)):
+           #ajouter le code pour les actions
+            print("tag: " + str(i) + str(path[i]) )
+            data = {}
+            data["target"] = path[i]
+            data["order"] = speed
+            target = data["target"]
+            server.currentTarget = target
+            driving(server, target, speed, False)
+    
     target = server.previousTarget
     order = 1
     speed = order
@@ -52,7 +109,7 @@ def avoidanceDriving(server):
            print("ok")
            
     else:
-       endPointKey = "M_M"
+       endPointKey = selectAvoidanceTarget(target)#"M_M"
        escapeType = "B"
        #print("echoB")
        path = pc.traceEscapeRoute(server, endPointKey, escapeType)
