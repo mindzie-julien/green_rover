@@ -30,7 +30,6 @@ float distance4; // Stores calculated distance in cm for First Sensor
 float distance5; // Stores calculated distance in cm for Second Sensor
 float distance6;
 float seuil = 20;
-//json et I2C
 int u1 ;
 int u2 ;
 int u3 ;
