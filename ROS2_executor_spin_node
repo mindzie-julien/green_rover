@@ -1,0 +1,24 @@
+#include <rclcpp/executors.hpp>
+#include <rclcpp/node.hpp>
+
+int main() {
+  rclcpp::init();
+  auto node1 = std::make_shared<rclcpp::Node>("node1");
+  auto node2 = std::make_shared<rclcpp::Node>("node2");
+
+  // Create a callback group
+  auto callback_group = rclcpp::CallbackGroup::SharedPtr(new rclcpp::MutuallyExclusiveCallbackGroup());
+
+  // Create subscriptions with specified callback group
+  node1->create_subscription<std::string>("topic", 10, callback_group);
+  node2->create_subscription<std::string>("topic", 10, callback_group);
+
+  // Create a SingleThreadedExecutor
+  auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+  executor->add_node(node1);
+  executor->add_node(node2);
+
+  // Spin the executor
+  executor->spin();
+  rclcpp::shutdown();
+}
